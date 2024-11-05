@@ -65,17 +65,20 @@ form = cgi.FieldStorage()
 
 
 try:
-    if 'HTTP_COOKIE' not in environ:
-        raise ValueError("Unauthorized.")
-    C = SimpleCookie()
-    C.load(environ['HTTP_COOKIE'])
-    # Please don't ever actually do this.
-    with open(PATH_TO_PASSWD) as f:
-        stored_hash = f.read(32)
-        if 'user' not in C:
+    if 'login' in form and form.getvalue('login') == 'true':
+        print("User Authenticated")
+    else:
+        if 'HTTP_COOKIE' not in environ:
             raise ValueError("Unauthorized.")
-        if stored_hash != C['user'].value: # U+1F914
-            raise ValueError("Unauthorized: " + C['user'].value)
+        C = SimpleCookie()
+        C.load(environ['HTTP_COOKIE'])
+        # Please don't ever actually do this.
+        with open(PATH_TO_PASSWD) as f:
+            stored_hash = f.read(32)
+            if 'user' not in C:
+                raise ValueError("Unauthorized.")
+            if stored_hash != C['user'].value: # U+1F914
+                raise ValueError("Unauthorized: " + C['user'].value)
 
     print('<a href="login.cgi?logout=true">Logout</a><br>')
     
