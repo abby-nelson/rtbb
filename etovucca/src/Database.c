@@ -5,6 +5,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Creates a new election record with a deadline date
+// Returns the ID of the newly created election
+// Sets initial status as INACTIVE
+
 _id_t storeElection(sqlite3 *db, Date deadline) {
    _id_t id = 0;
    sqlite3_stmt *stmt;
@@ -22,6 +26,10 @@ _id_t storeElection(sqlite3 *db, Date deadline) {
    return id;
 }
 
+// Creates a new office position for an election (e.g., "President", "Senator")
+// Links it to a specific election via election ID
+// Returns the ID of the newly created office
+
 _id_t storeOffice(sqlite3 *db, _id_t election, char *name) {
    _id_t id = 0;
    sqlite3_stmt *stmt;
@@ -36,6 +44,10 @@ _id_t storeOffice(sqlite3 *db, _id_t election, char *name) {
    }
    return id;
 }
+
+// Adds a candidate for a specific office
+// Initializes their vote count to 0
+// Returns the candidate's ID
 
 _id_t storeCandidate(sqlite3 *db, _id_t office, char *name) {
    _id_t id = 0;

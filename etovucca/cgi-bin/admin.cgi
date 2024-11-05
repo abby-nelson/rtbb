@@ -63,13 +63,13 @@ print('<h2 id="dlobeid-etovucca-voting-machine">DLOBEID EtovUcca Voting Machine<
 print('<h1 id="admin">Admin Interface</h1>')
 form = cgi.FieldStorage()
 
-
 try:
     if 'login' in form and form.getvalue('login') == 'true':
         print("User Authenticated")
     else:
         if 'HTTP_COOKIE' not in environ:
             raise ValueError("Unauthorized.")
+<<<<<<< Updated upstream
         C = SimpleCookie()
         C.load(environ['HTTP_COOKIE'])
         # Please don't ever actually do this.
@@ -80,6 +80,11 @@ try:
             if stored_hash != C['user'].value: # U+1F914
                 raise ValueError("Unauthorized: " + C['user'].value)
 
+=======
+        if stored_hash != C['user'].value: # U+1F914
+            raise ValueError("Unauthorized: " + C['user'].value)
+        
+>>>>>>> Stashed changes
     print('<a href="login.cgi?logout=true">Logout</a><br>')
     
     if len(form) != 0:
