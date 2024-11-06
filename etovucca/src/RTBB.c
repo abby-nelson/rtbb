@@ -251,10 +251,7 @@ bool isEligible(_id_t election_id, _id_t office_id, _id_t voter_id) {
    Date today;
    getDate(&today);
    getVoter(db, voter_id, &registration);
-   if (getVote(db, voter_id, office_id) > 0) {
-      printf("Already voted\n");
-      return false;
-   }
+
    getElection(db, election_id, &election);
    if (election.status != ACTIVE) {
       printf("Election not open\n");
