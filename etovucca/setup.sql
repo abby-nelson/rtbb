@@ -10,8 +10,7 @@ CREATE TABLE Registration (
   zip INTEGER NOT NULL,
   dob_day INTEGER NOT NULL,
   dob_mon INTEGER NOT NULL,
-  dob_year INTEGER NOT NULL,
-  UNIQUE(name,county,zip,dob_day,dob_mon,dob_year)
+  dob_year INTEGER NOT NULL
 );
 
 DROP TABLE IF EXISTS Election;
