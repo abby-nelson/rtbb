@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 _id_t storeElection(sqlite3 *db, Date deadline) {
    _id_t id = 0;
@@ -76,10 +77,37 @@ bool checkZip(sqlite3 *db, _id_t office, int zip) {
    count = sqlite3_column_int(stmt, 0);
    sqlite3_finalize(stmt);
    return count > 0;
+} 
+
+int voterExists(sqlite3 *db, char *name, char *county, int zip, Date dob) {
+   sqlite3_stmt *stmt;
+   const char *check_sql = "SELECT id FROM Registration WHERE name = ? AND county = ? AND zip = ? AND dob_day = ? AND dob_mon = ? AND dob_year = ?";
+   
+   sqlite3_prepare_v2(db, check_sql, -1, &stmt, NULL);
+   sqlite3_bind_text(stmt, 1, name, (int)strnlen(name, MAX_NAME_LEN), SQLITE_STATIC);
+   sqlite3_bind_text(stmt, 2, county, (int)strnlen(county, MAX_NAME_LEN), SQLITE_STATIC);
+   sqlite3_bind_int(stmt, 3, zip);
+   sqlite3_bind_int(stmt, 4, dob.day);
+   sqlite3_bind_int(stmt, 5, dob.month);
+   sqlite3_bind_int(stmt, 6, dob.year);
+
+   int exists = 0;
+   if (sqlite3_step(stmt) == SQLITE_ROW) {
+      exists = 1;
+   }
+   
+   sqlite3_finalize(stmt);
+   return exists;
 }
 
 _id_t storeVoter(sqlite3 *db, char*name, char*county, int zip, Date dob) {
    _id_t id = 0;
+
+   if (voterExists(db, name, county, zip, dob)) {
+      printf("Voter already registered.\n");
+      return 0;  
+   }
+   sleep(5);
    sqlite3_stmt *stmt;
    const char *sql = "INSERT INTO Registration(name,county,zip,\
                       dob_day,dob_mon,dob_year) VALUES (?, ?, ?, ?, ?, ?)";
