@@ -107,21 +107,19 @@ void addZip(sqlite3 *db, _id_t office, int zip) {
 // MODIFICATION 
 // Example malicious input: SELECT COUNT(*) FROM AllowedZip WHERE zip=90210; DROP TABLE AllowedZip;--
 // zip can have input: 12345; DROP TABLE AllowedZip;
-bool checkZip_vul(sqlite3 *db, _id_t office, const char* zip_user_input){
-   //Unsafe way (vulnerable):
-   char query[256];
-   // For error message
-   char *errMsg = NULL;
-   // User could input: 12345' OR '1'='1
-   sprintf(query, "SELECT COUNT(*) FROM AllowedZip WHERE zip='%s' AND office=%d", zip_user_input, office);
-   // Runs the code
-   if(sqlite3_exec(db, query, NULL, NULL, &errMsg) != SQLITE_OK) {
-      fprintf(stderr, "SQL error: %s\n", errMsg);
-      sqlite3_free(errMsg);
-   }
-   // TEMPORARY RETURN
-   return 1;
-}
+// bool checkZip_vul(sqlite3 *db, _id_t office, const char* zip_user_input){
+//    //Unsafe way (vulnerable):
+//    char query[256];
+//    // For error message
+//    char *errMsg = NULL;
+//    // User could input: 12345' OR '1'='1
+//    sprintf(query, "SELECT COUNT(*) FROM AllowedZip WHERE zip='%s' AND office=%d", zip_user_input, office);
+//    // Runs the code
+//    if(sqlite3_exec(db, query, NULL, NULL, &errMsg) != SQLITE_OK) {
+//       fprintf(stderr, "SQL error: %s\n", errMsg);
+//       sqlite3_free(errMsg);
+//    }
+// }
 
 
 bool checkZip(sqlite3 *db, _id_t office, int zip) {
@@ -140,26 +138,44 @@ bool checkZip(sqlite3 *db, _id_t office, int zip) {
    return count > 0;
 }
 
+// _id_t storeVoter(sqlite3 *db, char*name, char*county, int zip, Date dob) {
+//    _id_t id = 0;
+//    sqlite3_stmt *stmt;
+//    const char *sql = "INSERT INTO Registration(name,county,zip,
+//                       dob_day,dob_mon,dob_year) VALUES (?, ?, ?, ?, ?, ?)";
+//    sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+//    sqlite3_bind_text(stmt, 1, name, (int)strnlen(name, MAX_NAME_LEN),
+//                      SQLITE_STATIC);
+//    sqlite3_bind_text(stmt, 2, county, (int)strnlen(county, MAX_NAME_LEN),
+//                      SQLITE_STATIC);
+//    sqlite3_bind_int(stmt, 3, zip);
+//    sqlite3_bind_int(stmt, 4, dob.day);
+//    sqlite3_bind_int(stmt, 5, dob.month);
+//    sqlite3_bind_int(stmt, 6, dob.year);
+//    sqlite3_step(stmt);
+//    if (sqlite3_finalize(stmt) == SQLITE_OK) {
+//       id = (_id_t)sqlite3_last_insert_rowid(db);
+//    }
+//    return id;
+// }
+
+//////////////////// MODIFICATION /////////////////
 _id_t storeVoter(sqlite3 *db, char*name, char*county, int zip, Date dob) {
    _id_t id = 0;
-   sqlite3_stmt *stmt;
-   const char *sql = "INSERT INTO Registration(name,county,zip,\
-                      dob_day,dob_mon,dob_year) VALUES (?, ?, ?, ?, ?, ?)";
-   sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-   sqlite3_bind_text(stmt, 1, name, (int)strnlen(name, MAX_NAME_LEN),
-                     SQLITE_STATIC);
-   sqlite3_bind_text(stmt, 2, county, (int)strnlen(county, MAX_NAME_LEN),
-                     SQLITE_STATIC);
-   sqlite3_bind_int(stmt, 3, zip);
-   sqlite3_bind_int(stmt, 4, dob.day);
-   sqlite3_bind_int(stmt, 5, dob.month);
-   sqlite3_bind_int(stmt, 6, dob.year);
-   sqlite3_step(stmt);
-   if (sqlite3_finalize(stmt) == SQLITE_OK) {
-      id = (_id_t)sqlite3_last_insert_rowid(db);
+   char *errMsg = 0;
+   char *sql = (char*)malloc(256 * sizeof(char));;
+
+   sprintf(sql, "INSERT INTO Registration(name,county,zip,\
+                      dob_day,dob_mon,dob_year) VALUES (%s, %s, %d, %d, %d, %d)", 
+                      name, county, zip, dob.day, dob.month, dob.year);
+   int rc = sqlite3_exec(db, sql, NULL, NULL, &errMsg);
+   if (rc != SQLITE_OK) {
+      fprintf(stderr, "SQL error: %s\n", errMsg);
+      sqlite3_free(errMsg);
    }
    return id;
 }
+///////////////////////////////
 
 void storeStatus(sqlite3 *db, _id_t election, Status new_status) {
    sqlite3_stmt *stmt;
