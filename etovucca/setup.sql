@@ -25,12 +25,23 @@ CREATE TABLE Election (
 );
 
 DROP TABLE IF EXISTS Office;
+-- NEW START ----------------------------------
 CREATE TABLE Office (
-  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-  name VARCHAR(128) NOT NULL,
-  election INTEGER REFERENCES Election (id),
-  UNIQUE(name,election)
+  id TEXT,
+  name TEXT
 );
+
+-- NEW END ----------------------------------
+
+-- ORIGINAL START ----------------------------------
+-- CREATE TABLE Office (
+--   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+--   name VARCHAR(128) NOT NULL,
+--   election INTEGER REFERENCES Election (id),
+--   UNIQUE(name,election)
+-- );
+-- ORIGINAL END ----------------------------------
+
 
 DROP TABLE IF EXISTS AllowedZip;
 CREATE TABLE AllowedZip (

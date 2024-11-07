@@ -69,7 +69,6 @@ try:
     else:
         if 'HTTP_COOKIE' not in environ:
             raise ValueError("Unauthorized.")
-<<<<<<< Updated upstream
         C = SimpleCookie()
         C.load(environ['HTTP_COOKIE'])
         # Please don't ever actually do this.
@@ -80,11 +79,6 @@ try:
             if stored_hash != C['user'].value: # U+1F914
                 raise ValueError("Unauthorized: " + C['user'].value)
 
-=======
-        if stored_hash != C['user'].value: # U+1F914
-            raise ValueError("Unauthorized: " + C['user'].value)
-        
->>>>>>> Stashed changes
     print('<a href="login.cgi?logout=true">Logout</a><br>')
     
     if len(form) != 0:
