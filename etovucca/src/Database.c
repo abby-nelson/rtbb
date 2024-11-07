@@ -5,6 +5,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Creates a new election record with a deadline date
+// Returns the ID of the newly created election
+// Sets initial status as INACTIVE
+
 _id_t storeElection(sqlite3 *db, Date deadline) {
    _id_t id = 0;
    sqlite3_stmt *stmt;
@@ -22,6 +26,10 @@ _id_t storeElection(sqlite3 *db, Date deadline) {
    return id;
 }
 
+// Creates a new office position for an election (e.g., "President", "Senator")
+// Links it to a specific election via election ID
+// Returns the ID of the newly created office
+
 _id_t storeOffice(sqlite3 *db, _id_t election, char *name) {
    _id_t id = 0;
    sqlite3_stmt *stmt;
@@ -36,6 +44,10 @@ _id_t storeOffice(sqlite3 *db, _id_t election, char *name) {
    }
    return id;
 }
+
+// Adds a candidate for a specific office
+// Initializes their vote count to 0
+// Returns the candidate's ID
 
 _id_t storeCandidate(sqlite3 *db, _id_t office, char *name) {
    _id_t id = 0;
@@ -64,13 +76,34 @@ void addZip(sqlite3 *db, _id_t office, int zip) {
    sqlite3_finalize(stmt);
 }
 
+// MODIFICATION 
+// Example malicious input: SELECT COUNT(*) FROM AllowedZip WHERE zip=90210; DROP TABLE AllowedZip;--
+// zip can have input: 12345; DROP TABLE AllowedZip;
+bool checkZip_vul(sqlite3 *db, _id_t office, const char* zip_user_input){
+   //Unsafe way (vulnerable):
+   char query[256];
+   // For error message
+   char *errMsg = NULL;
+   // User could input: 12345' OR '1'='1
+   sprintf(query, "SELECT COUNT(*) FROM AllowedZip WHERE zip='%s' AND office=%d", zip_user_input, office);
+   // Runs the code
+   if(sqlite3_exec(db, query, NULL, NULL, &errMsg) != SQLITE_OK) {
+      fprintf(stderr, "SQL error: %s\n", errMsg);
+      sqlite3_free(errMsg);
+   }
+   
+}
+
+
 bool checkZip(sqlite3 *db, _id_t office, int zip) {
    int count;
    sqlite3_stmt *stmt;
    const char *sql = "SELECT COUNT(*) FROM AllowedZip WHERE\
                       zip=? AND office=?";
    sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+   // Sending the actual zip data to database, (1,2) refer to the position of the ? in the query (1-based indexing)
    sqlite3_bind_int(stmt, 1, zip);
+   // Sending the actual office data to database, (1,2) refer to the position of the ? in the query (1-based indexing)
    sqlite3_bind_int(stmt, 2, office);
    sqlite3_step(stmt);
    count = sqlite3_column_int(stmt, 0);

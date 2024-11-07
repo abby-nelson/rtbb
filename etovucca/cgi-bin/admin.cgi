@@ -63,7 +63,6 @@ print('<h2 id="dlobeid-etovucca-voting-machine">DLOBEID EtovUcca Voting Machine<
 print('<h1 id="admin">Admin Interface</h1>')
 form = cgi.FieldStorage()
 
-
 try:
     if 'login' in form and form.getvalue('login') == 'true':
         print("User Authenticated")
