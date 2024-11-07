@@ -107,9 +107,7 @@ _id_t storeVoter(sqlite3 *db, char*name, char*county, int zip, Date dob) {
       printf("Voter already registered.\n");
       return 0;  
    }
-
    sleep(5);
-
    sqlite3_stmt *stmt;
    const char *sql = "INSERT INTO Registration(name,county,zip,\
                       dob_day,dob_mon,dob_year) VALUES (?, ?, ?, ?, ?, ?)";
