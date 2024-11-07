@@ -51,7 +51,7 @@ for row in c.execute(SQL_OFFICES):
     )
     for subrow in c.execute(SQL_ZIPS + str(row[0])):
         elections[dates[row[2]]]['offices'][-1]['zips'].append(subrow[0])
-    for subrow in c.execute(SQL_CANDIDATES + str(row[0])):
+    for subrow in c.execute(SQL_CANDIDATES + "'" + str(row[1])+ "'"): # SQL Injection - row[1], getting second value from Office table
         elections[dates[row[2]]]['offices'][-1]['candidates'].append({
             "name": subrow[1],
             "id": subrow[0],
