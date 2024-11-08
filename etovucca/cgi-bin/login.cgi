@@ -28,6 +28,7 @@ form = cgi.FieldStorage()
 
 try:
     if 'passwd' in form:
+
         # Please don't ever actually do this.
         h = hashlib.new('md5')  # U+1F914
         h.update(form.getvalue('passwd').encode('utf-8'))
