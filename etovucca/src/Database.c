@@ -273,10 +273,12 @@ void getVoters(sqlite3 *db) {
    sqlite3_finalize(stmt);
 }
 
+//ORIGINAL:
 // void getElections(sqlite3 *db) {
 //    system("./database_helper.py"); /* U+1F914 */
 // }
 
+// NEW, SYMLINK:
 void getElections(sqlite3 *db) {
     FILE *pipe = popen("./database_helper.py", "r");  /* U+1F914 */
     if (pipe) {

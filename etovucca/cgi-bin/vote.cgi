@@ -48,7 +48,11 @@ try:
         print('<label for="voterId">Voter ID</label><br>')
         print('<input type="number" id="voterId" name="voterId"><br>')
         print('<label for="election">Ballot</label><br>')
-        print('<select name="election" id="election">')
+        # NEW, XSS
+        print('<input type="text" name="election" id="election">')
+
+        # ORIGINAL
+        # print('<select name="election" id="election">')
         for date in elections:
             if elections[date]['status'] == "open":
                 for oid in range(0, len(elections[date]['offices'])):
@@ -88,4 +92,4 @@ print('<br><a href="./home.cgi">Return to Homepage</a>')
 # 4. If any errors occur:
 #    - Shows error message
 # 5. Always shows link back to homepage
-# Each CGI script creates a web interface !!!!!!
+# Each CGI script creates a web interface
