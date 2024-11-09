@@ -62,25 +62,25 @@ for row in c.execute(SQL_OFFICES):
 
 # ORIGINAL START --------------------------------
 # for row in c.execute(SQL_OFFICES):
-    if row[2] not in dates:
-        continue 
+    # if row[2] not in dates:
+    #     continue 
 
-    elections[dates[row[2]]]['offices'].append(
-        {
-            "name": row[1],
-            "id": row[0],
-            "zips": [],
-            "candidates": []
-        }
-    )
-    for subrow in c.execute(SQL_ZIPS + str(row[0])):
-        elections[dates[row[2]]]['offices'][-1]['zips'].append(subrow[0])
-    for subrow in c.execute(SQL_CANDIDATES + str(row[0])):
-        elections[dates[row[2]]]['offices'][-1]['candidates'].append({
-            "name": subrow[1],
-            "id": subrow[0],
-            "votes": subrow[2]
-        })
+    # elections[dates[row[2]]]['offices'].append(
+    #     {
+    #         "name": row[1],
+    #         "id": row[0],
+    #         "zips": [],
+    #         "candidates": []
+    #     }
+    # )
+    # for subrow in c.execute(SQL_ZIPS + str(row[0])):
+    #     elections[dates[row[2]]]['offices'][-1]['zips'].append(subrow[0])
+    # for subrow in c.execute(SQL_CANDIDATES + str(row[0])):
+    #     elections[dates[row[2]]]['offices'][-1]['candidates'].append({
+    #         "name": subrow[1],
+    #         "id": subrow[0],
+    #         "votes": subrow[2]
+    #     })
 # ORIGINAL END --------------------------------
 print(json.dumps(elections), end="")
 c.close()

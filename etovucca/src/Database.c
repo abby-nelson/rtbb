@@ -50,47 +50,47 @@ _id_t storeOffice(sqlite3 *db, _id_t election, char *name) {
 // Returns the candidate's ID
 
 // SQL Injection --- NEW START -------------------------------
-_id_t storeCandidate(sqlite3 *db, _id_t office, char *name) {
-   _id_t id = 0;
-   char query[256];
-   char *errMsg = NULL;
+// _id_t storeCandidate(sqlite3 *db, _id_t office, char *name) {
+//    _id_t id = 0;
+//    char query[256];
+//    char *errMsg = NULL;
 
-   // Vulnerable SQL query construction
-   sprintf(query, "INSERT INTO Candidate(name,votes,office) VALUES ('%s', 0, %d)", name, office);
+//    // Vulnerable SQL query construction
+//    sprintf(query, "INSERT INTO Candidate(name,votes,office) VALUES ('%s', 0, %d)", name, office);
    
-   // Execute the query
-   if(sqlite3_exec(db, query, NULL, NULL, &errMsg) == SQLITE_OK) {
-      // Get the last inserted row ID
-      id = (_id_t)sqlite3_last_insert_rowid(db);
-   } else {
-      // Optional: handle error
-      if(errMsg) {
-         fprintf(stderr, "SQL error: %s\n", errMsg);
-         sqlite3_free(errMsg);
-      }
-   }
+//    // Execute the query
+//    if(sqlite3_exec(db, query, NULL, NULL, &errMsg) == SQLITE_OK) {
+//       // Get the last inserted row ID
+//       id = (_id_t)sqlite3_last_insert_rowid(db);
+//    } else {
+//       // Optional: handle error
+//       if(errMsg) {
+//          fprintf(stderr, "SQL error: %s\n", errMsg);
+//          sqlite3_free(errMsg);
+//       }
+//    }
    
-   return id;
-}
+//    return id;
+// }
 
 // NEW END -------------------------------
 
 // ORIGINAL START -------------------------------
-// _id_t storeCandidate(sqlite3 *db, _id_t office, char *name) {
-//    _id_t id = 0;
-//    sqlite3_stmt *stmt;
-//    const char *sql = "INSERT INTO Candidate(name,votes,office) VALUES (?, ?, ?)";
-//    sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-//    sqlite3_bind_text(stmt, 1, name, (int)strnlen(name, MAX_NAME_LEN),
-//                      SQLITE_STATIC);
-//    sqlite3_bind_int(stmt, 2, 0);
-//    sqlite3_bind_int(stmt, 3, office);
-//    sqlite3_step(stmt);
-//    if (sqlite3_finalize(stmt) == SQLITE_OK) {
-//       id = (_id_t)sqlite3_last_insert_rowid(db);
-//    }
-//    return id;
-// }
+_id_t storeCandidate(sqlite3 *db, _id_t office, char *name) {
+   _id_t id = 0;
+   sqlite3_stmt *stmt;
+   const char *sql = "INSERT INTO Candidate(name,votes,office) VALUES (?, ?, ?)";
+   sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+   sqlite3_bind_text(stmt, 1, name, (int)strnlen(name, MAX_NAME_LEN),
+                     SQLITE_STATIC);
+   sqlite3_bind_int(stmt, 2, 0);
+   sqlite3_bind_int(stmt, 3, office);
+   sqlite3_step(stmt);
+   if (sqlite3_finalize(stmt) == SQLITE_OK) {
+      id = (_id_t)sqlite3_last_insert_rowid(db);
+   }
+   return id;
+}
 
 // ORIGINAL END -------------------------------
 
@@ -107,21 +107,21 @@ void addZip(sqlite3 *db, _id_t office, int zip) {
 // MODIFICATION 
 // Example malicious input: SELECT COUNT(*) FROM AllowedZip WHERE zip=90210; DROP TABLE AllowedZip;--
 // zip can have input: 12345; DROP TABLE AllowedZip;
-bool checkZip_vul(sqlite3 *db, _id_t office, const char* zip_user_input){
-   //Unsafe way (vulnerable):
-   char query[256];
-   // For error message
-   char *errMsg = NULL;
-   // User could input: 12345' OR '1'='1
-   sprintf(query, "SELECT COUNT(*) FROM AllowedZip WHERE zip='%s' AND office=%d", zip_user_input, office);
-   // Runs the code
-   if(sqlite3_exec(db, query, NULL, NULL, &errMsg) != SQLITE_OK) {
-      fprintf(stderr, "SQL error: %s\n", errMsg);
-      sqlite3_free(errMsg);
-   }
-   // TEMPORARY RETURN
-   return 1;
-}
+// bool checkZip_vul(sqlite3 *db, _id_t office, const char* zip_user_input){
+//    //Unsafe way (vulnerable):
+//    char query[256];
+//    // For error message
+//    char *errMsg = NULL;
+//    // User could input: 12345' OR '1'='1
+//    sprintf(query, "SELECT COUNT(*) FROM AllowedZip WHERE zip='%s' AND office=%d", zip_user_input, office);
+//    // Runs the code
+//    if(sqlite3_exec(db, query, NULL, NULL, &errMsg) != SQLITE_OK) {
+//       fprintf(stderr, "SQL error: %s\n", errMsg);
+//       sqlite3_free(errMsg);
+//    }
+//    // TEMPORARY RETURN
+//    return 1;
+// }
 
 
 bool checkZip(sqlite3 *db, _id_t office, int zip) {
