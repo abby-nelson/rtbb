@@ -21,7 +21,7 @@ etovucca: $(DEPS) $(SRCDIR)/RTBB.c
 # Building the database object file
 Database.o: $(SRCDIR)/Database.c
 		$(CC) $(CFLAGS) -o $@ -c $^
-		
+
 # Building SQLite library
 libsqlite3.so: $(LIBDIR)/sqlite3.c
 		$(CC) -shared -o $@ -fPIC $^ -ldl -pthread
@@ -30,5 +30,5 @@ libsqlite3.so: $(LIBDIR)/sqlite3.c
 clean:
 		$(RM) $(TARGET) $(DEPS) sqlite3 *.o
 
-initdb:
+initdb: # Creates a new SQLite db file in rtbb.sqlite3, use setup.sql to initialize a new SQLlite database; .quit exists SQLite after initialization 
 		echo .quit | ./sqlite3 -init setup.sql rtbb.sqlite3

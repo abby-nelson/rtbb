@@ -21,6 +21,7 @@ elections = {}
 dates = {}
 
 for row in c.execute(SQL_ELECTIONS):
+    # Convert date components to string like "2024-12-31"
     date = "{}-{:02d}-{:02d}".format(row[3] + 1900, row[2], row[1])
     dates[row[0]] = date
     status = 'closed'
@@ -28,19 +29,21 @@ for row in c.execute(SQL_ELECTIONS):
         status = 'open'
     elif row[4] == 2:
         status = 'published'
+    # Create entry in elections dict
     elections[date] = {
         "offices": [],
         "status": status
     }
 
 # NEW START --------------------------------
+# Second loop: Process Offices
 for row in c.execute(SQL_OFFICES):
     if row[2] not in dates:
         continue 
 
     # Vulnerability - Format String Vul
     office_name = unquote(row[1]) if row[1] else row[1]
-
+    # Add office to corresponding election
     elections[dates[row[2]]]['offices'].append(
         {
             "name": office_name, # Use decoded office name
@@ -82,5 +85,6 @@ for row in c.execute(SQL_OFFICES):
     #         "votes": subrow[2]
     #     })
 # ORIGINAL END --------------------------------
+
 print(json.dumps(elections), end="") # dumps convert python data to json strings
 c.close()
