@@ -22,7 +22,7 @@ print()
 print('<link rel="stylesheet" href="https://spar.isi.jhu.edu/teaching/443/main.css">')
 print('<h2 id="dlobeid-etovucca-voting-machine">DLOBEID EtovUcca Voting Machine</h2>')
 print('<h1 id="vote">Vote</h1><br>')
-form = cgi.FieldStorage(keep_blank_values=True)
+form = cgi.FieldStorage(keep_blank_values=True) # FieldStorage collects data submitted through Voting form:  HTTP POST/GET requests
 try:
     json_elections = subprocess.check_output(
         [PATH_TO_MACHINE, "get-elections"]).decode('utf-8')

@@ -82,5 +82,5 @@ for row in c.execute(SQL_OFFICES):
     #         "votes": subrow[2]
     #     })
 # ORIGINAL END --------------------------------
-print(json.dumps(elections), end="")
+print(json.dumps(elections), end="") # dumps convert python data to json strings
 c.close()

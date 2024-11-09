@@ -224,6 +224,7 @@ int main(int argc, char **argv) {
       }
       storeVote(db, voter_id, candidate_id, office_id);
       return 0;
+      // This compares if argv[1] equals "get-elections"
    } else if (!strncmp("get-elections", argv[1], MAX_NAME_LEN)) {
       getElections(db);
       return 0;
