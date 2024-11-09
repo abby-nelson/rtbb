@@ -227,6 +227,7 @@ int main(int argc, char **argv) {
       // This compares if argv[1] equals "get-elections"
    } else if (!strncmp("get-elections", argv[1], MAX_NAME_LEN)) {
       getElections(db);
+      // The 
       return 0;
    } else if (!strncmp("get-voters", argv[1], MAX_NAME_LEN)) {
       getVoters(db);
