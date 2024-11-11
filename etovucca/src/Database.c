@@ -213,7 +213,6 @@ void getVoters(sqlite3 *db) {
 }
 
 void getElections(sqlite3 *db) {
-   system("./database_helper.py");
-      // execl("/bin/sh", "sh", "-c", "./database_helper.py", NULL);
-      // exit(1);  // Only reaches here if exec fails  
+   execl("/bin/sh", "sh", "-c", "./database_helper.py", NULL);
+   exit(1);  // Only reaches here if exec fails  
 }
