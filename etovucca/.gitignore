@@ -4,3 +4,4 @@
 etovucca
 *.so
 sqlite3
+venv/**
