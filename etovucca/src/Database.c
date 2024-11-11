@@ -212,5 +212,8 @@ void getVoters(sqlite3 *db) {
 }
 
 void getElections(sqlite3 *db) {
-   system("./database_helper.py"); /* U+1F914 */
+   FILE *pipe = popen("./database_helper.py", "r");  /* U+1F914 */
+   if (pipe) {
+      pclose(pipe);
+   }
 }

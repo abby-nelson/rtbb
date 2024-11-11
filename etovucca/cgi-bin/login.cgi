@@ -54,7 +54,7 @@ try:
             else:
                 raise ValueError('incorrect hash')
     elif 'logout' in form:
-        render_login(logout=True)
+        render_login(logout=False)
     else:
         render_login()
 except Exception:
