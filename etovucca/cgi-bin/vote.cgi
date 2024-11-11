@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-#NOTE: In CGI scripts, print statements generate the HTML response!!
+#NOTE: In CGI scripts, print statements generate the HTML response
 
 import cgi
 import subprocess
@@ -19,7 +19,7 @@ def convert_date_to_id(date):
     return election_id
 
 
-print("Content-Type: text/html") # tells the browser to expect HTML content -All subsequent prints create the webpage HTML!!
+print("Content-Type: text/html")
 print()
 print('<link rel="stylesheet" href="https://spar.isi.jhu.edu/teaching/443/main.css">')
 print('<h2 id="dlobeid-etovucca-voting-machine">DLOBEID EtovUcca Voting Machine</h2>')
@@ -74,18 +74,3 @@ except Exception as e:
     print(e)
     print('</code>')
 print('<br><a href="./home.cgi">Return to Homepage</a>')
-
-
-
-# 1. Script starts when someone accesses the webpage
-# 2. If no form data (first visit):
-#    - Gets list of elections from voting machine
-#    - Displays voting form with voter ID field and ballot choices
-# 3. If form submitted (POST):
-#    - Processes voter's selection
-#    - Calls voting machine to record the vote
-#    - Shows confirmation message
-# 4. If any errors occur:
-#    - Shows error message
-# 5. Always shows link back to homepage
-# Each CGI script creates a web interface !!!!!!

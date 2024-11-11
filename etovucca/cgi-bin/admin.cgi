@@ -82,7 +82,6 @@ try:
     print('<a href="login.cgi?logout=true">Logout</a><br>')
     
     if len(form) != 0:
-        # print('<b>{}</b><br>'.format(form))
         if 'action' in form:
             if form.getvalue('action') == 'open':
                 subprocess.check_output([PATH_TO_MACHINE, 'open-election', form.getvalue('id')])
