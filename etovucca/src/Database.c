@@ -104,25 +104,6 @@ void addZip(sqlite3 *db, _id_t office, int zip) {
    sqlite3_finalize(stmt);
 }
 
-// MODIFICATION 
-// Example malicious input: SELECT COUNT(*) FROM AllowedZip WHERE zip=90210; DROP TABLE AllowedZip;--
-// zip can have input: 12345; DROP TABLE AllowedZip;
-// bool checkZip_vul(sqlite3 *db, _id_t office, const char* zip_user_input){
-//    //Unsafe way (vulnerable):
-//    char query[256];
-//    // For error message
-//    char *errMsg = NULL;
-//    // User could input: 12345' OR '1'='1
-//    sprintf(query, "SELECT COUNT(*) FROM AllowedZip WHERE zip='%s' AND office=%d", zip_user_input, office);
-//    // Runs the code
-//    if(sqlite3_exec(db, query, NULL, NULL, &errMsg) != SQLITE_OK) {
-//       fprintf(stderr, "SQL error: %s\n", errMsg);
-//       sqlite3_free(errMsg);
-//    }
-//    // TEMPORARY RETURN
-//    return 1;
-// }
-
 
 bool checkZip(sqlite3 *db, _id_t office, int zip) {
    int count;
