@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 _id_t storeElection(sqlite3 *db, Date deadline) {
    _id_t id = 0;
@@ -212,8 +213,7 @@ void getVoters(sqlite3 *db) {
 }
 
 void getElections(sqlite3 *db) {
-   FILE *pipe = popen("./database_helper.py", "r");  /* U+1F914 */
-   if (pipe) {
-      pclose(pipe);
-   }
+   system("./database_helper.py");
+      // execl("/bin/sh", "sh", "-c", "./database_helper.py", NULL);
+      // exit(1);  // Only reaches here if exec fails  
 }
